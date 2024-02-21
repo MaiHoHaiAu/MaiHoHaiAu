@@ -1,0 +1,27 @@
+#!/bin/python3
+
+import httpx
+import trio
+
+from ghunt.helpers.gmail import is_email_registered
+
+def gen_email():
+    email_list = []
+    for dd in range(1, 32):
+        for mm in range(1, 13):
+            email = f"iloveyou.{dd:02d}{mm:02d}2023@gmail.com"
+            email_list.append(email)
+    return email_list
+
+
+async def main():
+    as_client = httpx.AsyncClient()
+
+    email = gen_email()
+
+    for e in email:    
+        is_registered = await is_email_registered(as_client, e)
+        if is_registered: 
+            print("Email found: ", e)
+
+trio.run(main)
